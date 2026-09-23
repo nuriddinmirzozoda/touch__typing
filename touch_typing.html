@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тайпинг — Touch Typing</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b1e;--card:#12163a;--line:#262b62;--tx:#e8ebff;--mut:#8b91c9;--vi:#7c5cff;--cy:#22d3ee;--pk:#ff4d8d;--gn:#2ee6a8}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--tx);font:400 16px/1.5 Inter,system-ui,sans-serif;overflow-x:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.45;z-index:-1;animation:fl 18s ease-in-out infinite alternate}
+.o1{width:480px;height:480px;background:var(--vi);top:-120px;left:-100px}
+.o2{width:420px;height:420px;background:var(--cy);bottom:-140px;right:-80px;animation-delay:-8s}
+.o3{width:300px;height:300px;background:var(--pk);top:40%;left:55%;opacity:.22;animation-delay:-4s}
+@keyframes fl{to{transform:translate(60px,-40px) scale(1.15)}}
+.wrap{max-width:1080px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.logo{display:flex;gap:12px;align-items:center}
+.logo b{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font:700 22px 'JetBrains Mono';background:linear-gradient(135deg,var(--vi),var(--cy));box-shadow:0 4px 0 #3b2aa0,0 10px 24px #7c5cff88}
+.logo h1{font:800 20px Inter}
+.logo small{color:var(--mut);display:block;font-size:12px}
+.langs{display:flex;gap:6px;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,.k:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.pill{padding:8px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:14px;box-shadow:0 3px 0 #0a0c26;transition:transform .1s,box-shadow .1s}
+.pill:active{transform:translateY(3px);box-shadow:0 0 0 #0a0c26}
+.pill.on{background:linear-gradient(135deg,var(--vi),#5b3fe0);border-color:#9d86ff;box-shadow:0 3px 0 #33228f,0 8px 20px #7c5cff77}
+.glass{background:linear-gradient(160deg,#171c4acc,#0e1230cc);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(12px);box-shadow:0 1px 0 #ffffff14 inset,0 20px 40px -12px #000a}
+.lv{display:flex;gap:10px;flex-wrap:wrap;padding:14px;align-items:center}
+.lv .grp{display:flex;gap:6px;align-items:center;margin-left:auto}
+.star{color:#ffd93d;margin-left:4px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.st{padding:14px 16px}
+.st span{font-size:12px;color:var(--mut)}
+.st div{font:700 28px 'JetBrains Mono'}
+.prompt{padding:26px;position:relative;overflow:hidden;min-height:170px}
+.bar{position:absolute;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--vi),var(--cy),var(--gn));transition:width .15s;box-shadow:0 0 14px var(--cy)}
+#txt{font:500 clamp(20px,3.4vw,32px)/1.7 'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-word;color:#5d64a8;user-select:none}
+#txt .c{color:var(--gn)}
+#txt .a{background:#7c5cff44;color:#fff;border-radius:4px;box-shadow:0 2px 0 var(--cy)}
+#txt .e{background:#ff4d8d44;color:#ff8fb3;border-radius:4px;animation:sh .2s}
+@keyframes sh{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+#sub{margin-top:8px;font-size:22px;color:var(--cy)}
+#hint{margin-top:14px;font-size:13px;color:var(--mut)}
+.stage{padding:26px 14px 18px;perspective:900px}
+#kb{display:flex;flex-direction:column;gap:8px;max-width:760px;margin:0 auto;transform:rotateX(22deg);transform-style:preserve-3d;transition:transform .25s ease-out}
+.row{display:flex;gap:7px;justify-content:center}
+.k{flex:1 1 0;max-width:48px;aspect-ratio:1;border-radius:10px;display:grid;place-items:center;position:relative;font:700 clamp(11px,2vw,16px) 'JetBrains Mono';color:#cfd4ff;background:linear-gradient(#2c3163,#1c2050);box-shadow:0 1px 0 #5a60a8 inset,0 4px 0 #10133a,0 7px 0 #080a26,0 12px 16px #0009;transition:transform .08s,box-shadow .08s,background .15s}
+.k i{position:absolute;bottom:4px;width:5px;height:5px;border-radius:50%;background:var(--f);opacity:.8}
+.k.down{transform:translateY(6px);box-shadow:0 1px 0 #5a60a8 inset,0 0 0 #10133a,0 1px 0 #080a26,0 3px 6px #0009}
+.k.t{background:linear-gradient(#8f72ff,#5b3fe0);color:#fff;transform:translateZ(14px);box-shadow:0 1px 0 #cbbcff inset,0 4px 0 #34239a,0 7px 0 #1d1266,0 0 30px #7c5cffcc}
+.k.sp{flex:none;width:52%;max-width:none;aspect-ratio:auto;height:44px}
+.hands{display:flex;justify-content:center;gap:clamp(20px,8vw,90px);margin-top:28px}
+.hands svg{width:min(230px,42vw);height:auto;overflow:visible;filter:drop-shadow(0 12px 14px #0008)}
+.fg{transition:transform .15s,filter .15s;transform-box:fill-box}
+.fg .hl{fill:var(--f);opacity:0;transition:opacity .15s}
+.fg.on{transform:translateY(-7px);filter:drop-shadow(0 0 9px var(--f))}
+.fg.on .hl{opacity:.65}
+.ov{position:fixed;inset:0;background:#040614cc;backdrop-filter:blur(8px);display:none;place-items:center;padding:16px;z-index:9}
+.ov.on{display:grid}
+.mod{max-width:440px;width:100%;padding:28px;text-align:center;display:flex;flex-direction:column;gap:16px;animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.85) rotateX(20deg);opacity:0}}
+.mod h2{font:800 24px Inter}
+.mod p{color:var(--mut);font-size:15px}
+.big{padding:14px 18px;border-radius:14px;font-weight:600;background:linear-gradient(135deg,var(--vi),var(--cy));color:#fff;box-shadow:0 4px 0 #2b2a9a,0 10px 24px #22d3ee55}
+.big:active{transform:translateY(4px);box-shadow:0 0 0 #2b2a9a}
+.big.g{background:var(--card);border:1px solid var(--line);box-shadow:0 4px 0 #0a0c26}
+.rs{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}
+.rs div{background:#0a0d2a;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--mut)}
+.rs b{display:block;font:700 22px 'JetBrains Mono';color:var(--tx)}
+.btns{display:flex;gap:10px}.btns .big{flex:1}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:8px 0 20px}
+@media(max-width:640px){.stats{grid-template-columns:1fr 1fr}.lv .grp{margin-left:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<div class="wrap">
+  <header>
+    <div class="logo"><b>T</b><div><h1>Тайпинг</h1><small id="tag"></small></div></div>
+    <nav class="langs" id="langs" aria-label="Language"></nav>
+  </header>
+  <section class="glass lv"><div id="lvs" style="display:flex;gap:8px;flex-wrap:wrap"></div><div class="grp" id="les"></div><button class="pill" id="wk" hidden></button></section>
+  <section class="stats">
+    <div class="glass st"><span data-u="0"></span><div id="wpm">0</div></div>
+    <div class="glass st"><span data-u="1"></span><div id="acc">100%</div></div>
+    <div class="glass st"><span data-u="2"></span><div id="erc" style="color:var(--pk)">0</div></div>
+    <div class="glass st"><span data-u="3"></span><div id="tim">00:00</div></div>
+  </section>
+  <section class="glass prompt">
+    <div class="bar" id="bar"></div>
+    <div id="txt" aria-live="off"></div><div id="sub"></div>
+    <div id="hint"></div>
+  </section>
+  <section class="glass stage" id="stage"><div id="kb"></div><div class="hands" id="hands"></div></section>
+  <footer>© 2026 Тайпинг · Tajik · English · Русский · Türkçe · 中文</footer>
+</div>
+
+<div class="ov" id="intro"><div class="glass mod">
+  <h2 data-u="7"></h2><p data-u="8"></p>
+  <button class="big" id="goTest" data-u="9"></button>
+  <button class="big g" id="goBeg" data-u="10"></button>
+</div></div>
+
+<div class="ov" id="res"><div class="glass mod">
+  <h2 data-u="11"></h2><p id="rmsg"></p><p id="rweak" style="color:var(--pk);font-weight:600"></p>
+  <div class="rs"><div><span data-u="0"></span><b id="rw">0</b></div><div><span data-u="1"></span><b id="ra">0</b></div><div><span data-u="2"></span><b id="re">0</b></div><div><span data-u="3"></span><b id="rt">0</b></div></div>
+  <div class="btns"><button class="big g" id="rRetry" data-u="4"></button><button class="big" id="rNext" data-u="5"></button></div>
+</div></div>
+
+<script>
+// ---- Дастаҳо / Fingers by column: colour per finger ----
+const FING=['LP','LR','LM','LI','LI','RI','RI','RM','RR','RP','RP','RP','RP'];
+const FCOL={LP:'#ff4d8d',LR:'#ff9f43',LM:'#ffd93d',LI:'#2ee6a8',RI:'#22d3ee',RM:'#ffd93d',RR:'#ff9f43',RP:'#ff4d8d',LT:'#9b7bff',RT:'#9b7bff'};
+const NUM='1234567890';
+// ---- Забонҳо: layout, UI strings, placement sentence, levels ("text|caption") ----
+const L={
+tg:{n:'Тоҷикӣ',tag:'Омӯзиши навиштани даҳангуштӣ',rows:[NUM,'йцукенгшщзхъғ','фывапролджэҳ','ячсмитьбюӣқӯҷ'],
+ u:['Суръат','Саҳеҳӣ','Хатогиҳо','Вақт','Аз нав','Давом додан','Барои оғоз калидеро пахш кунед','Дараҷаи худро санҷед','Як ҷумлаи кӯтоҳ нависед — сайт дараҷаи шуморо муайян карда, аз ҷои дуруст оғоз мекунад.','Санҷишро оғоз кардан','Ман навдарсам','Офарин!','Тавсия: аз «{n}» оғоз кунед'],
+ lay:'Клавиатураро ба тоҷикӣ гузаронед',test:'Забони тоҷикӣ ганҷи миллат аст.',
+ lv:[{t:'Қатори асосӣ',l:['фыва олдж фыва олдж','вал фол лав жала лола']},{t:'Қатори боло',l:['йцук енгш щзхъ','китоб калам курта шакар гул']},{t:'Қатори поён',l:['ячсм итьб ю','мактаб донишҷӯ омӯзгор ватан']},{t:'Ҳарфҳои тоҷикӣ',l:['ғоз ӣд қалам ӯрдак ҳайвон ҷома','Тоҷикистон ватани азизи мо аст.']},{t:'Матнҳо',l:['Дониш чароғи ақл ва аломати адолат аст.','Ба омӯхтани илм ҳамеша кӯшиш кун, зеро илм калиди ҳамаи мушкилот аст.']}]},
+en:{n:'English',tag:'Learn touch typing',rows:[NUM,'qwertyuiop','asdfghjkl;','zxcvbnm,./'],
+ u:['Speed','Accuracy','Errors','Time','Retry','Continue','Press any key to start','Check your level','Type one short sentence. The site will measure your skill and pick the right starting lesson.','Start the test','I am a beginner','Well done!','Recommended: start with “{n}”'],
+ lay:'Switch your keyboard to English',test:'The quick brown fox jumps over the lazy dog.',
+ lv:[{t:'Home row',l:['asdf jkl; asdf jkl;','sad lad fall flask salad']},{t:'Top row',l:['qwer tyui op','quiet water pretty tower']},{t:'Bottom row',l:['zxcv bnm,.','zebra voxel banana number']},{t:'Sentences',l:['Practice makes progress, one word at a time.','The quick brown fox jumps over the lazy dog.']}]},
+ru:{n:'Русский',tag:'Обучение слепой печати',rows:[NUM,'йцукенгшщзхъ','фывапролджэ','ячсмитьбю'],
+ u:['Скорость','Точность','Ошибки','Время','Заново','Дальше','Нажмите любую клавишу','Проверьте свой уровень','Напечатайте одно короткое предложение — сайт определит ваш навык и подберёт первый урок.','Начать тест','Я новичок','Отлично!','Рекомендуем начать с «{n}»'],
+ lay:'Переключите раскладку на русскую',test:'Ученье свет а неученье тьма.',
+ lv:[{t:'Основной ряд',l:['фыва олдж фыва олдж','вал дол лад фол']},{t:'Верхний ряд',l:['йцук енгш щзх','город шутка курт']},{t:'Нижний ряд',l:['ячсм итьб ю','ясно мысль бинт']},{t:'Предложения',l:['Ученье свет а неученье тьма.','Без труда не вытащишь рыбку из пруда.']}]},
+tr:{n:'Türkçe',tag:'On parmak klavye öğren',rows:[NUM,'qwertyuıopğü','asdfghjklşi','zxcvbnmöç.'],
+ u:['Hız','Doğruluk','Hata','Süre','Tekrar','Devam','Başlamak için bir tuşa basın','Seviyeni test et','Kısa bir cümle yaz. Site becerini ölçüp doğru dersten başlatacak.','Teste başla','Yeni başlıyorum','Aferin!','Önerilen başlangıç: “{n}”'],
+ lay:'Klavyeni Türkçe yap',test:'Bugün hava çok güzel ve deniz sakin.',
+ lv:[{t:'Orta sıra',l:['asdf jklş asdf jklş','ada sal asla kalsa']},{t:'Üst sıra',l:['qwer tyuı opğü','kuru üzüm portakal']},{t:'Alt sıra',l:['zxcv bnm öç','çok güzel bizim ömür']},{t:'Cümleler',l:['Damlaya damlaya göl olur.','Bugün hava çok güzel ve deniz sakin.']}]},
+zh:{n:'中文',tag:'盲打练习（拼音输入）',rows:[NUM,'qwertyuiop','asdfghjkl;','zxcvbnm,./'],
+ u:['速度','准确率','错误','时间','重来','继续','按任意键开始','测测你的水平','输入一句短句，网站会评估你的水平并推荐起点课程。','开始测试','我是新手','太棒了！','推荐从“{n}”开始'],
+ lay:'请输入拼音（英文键盘）',test:'wo ai xue xi zhong wen|我爱学习中文',
+ lv:[{t:'基准行',l:['asdf jkl asdf jkl|字母练习','ka fei sa la|咖啡 沙拉']},{t:'上排',l:['wo ai ni|我爱你','peng you yi qi|朋友一起']},{t:'下排',l:['xie xie zhong guo|谢谢中国','bu ke qi|不客气']},{t:'句子',l:['wo ai xue xi zhong wen|我爱学习中文','jin tian tian qi hen hao|今天天气很好']}]}
+};
+const X={
+tg:['Ҳарфҳои душвор','Хатогиҳо зиёд буданд. Барои ҳарфҳои душвор машқи махсус омода шуд.','Ҳарфҳои нав','Машқи ҳарфҳои душвор','Хуб! Ҳарфҳои душвор мустаҳкам шуданд.','Омӯзиши ҳарфҳо'],
+en:['Weak letters','Too many mistakes. A drill for your weak letters is ready.','New letters','Drill weak letters','Nice! Your weak letters are getting stronger.','Learn the letters'],
+ru:['Слабые буквы','Много ошибок. Подготовлена тренировка слабых букв.','Новые буквы','Тренировать слабые буквы','Отлично! Слабые буквы стали увереннее.','Изучение букв'],
+tr:['Zayıf harfler','Çok hata yaptın. Zayıf harfler için özel bir alıştırma hazır.','Yeni harfler','Zayıf harfleri çalış','Güzel! Zayıf harfler güçleniyor.','Harfleri öğren'],
+zh:['薄弱字母','错误较多，已为你准备薄弱字母专项练习。','新字母','练习薄弱字母','很好！薄弱字母有进步了。','学习字母']};
+const isL=c=>/\p{L}/u.test(c);
+function chunk(a,n){const o=[];for(let i=0;i<a.length;i+=n)o.push(a.slice(i,i+n));if(o.length>1&&o[o.length-1].length<2)o[o.length-2]=o[o.length-2].concat(o.pop());return o}
+// Repeats each new letter, then mixes new + known letters
+function gen(nc,pool,len){
+  const r=a=>a[Math.random()*a.length|0];const out=nc.concat(nc).map(c=>c.repeat(3));
+  while(out.join(' ').length<len){let w='';const n=2+(Math.random()*3|0);for(let i=0;i<n;i++)w+=Math.random()<.65?r(nc):r(pool);out.push(w)}
+  return out.join(' ').slice(0,len).trim()}
+for(const k in L){L[k].u.push(...X[k]);let pool=[];
+  const st=[2,1,3].map(i=>[...L[k].rows[i]].filter(isL)).flatMap(r=>chunk(r,4)).map(c=>{pool=pool.concat(c);return{n:c,p:pool.slice()}});
+  L[k].lv.unshift({t:L[k].u[18],l:st})}
+// ---- Ҳолат ----
+const $=s=>document.querySelector(s);
+let S={lang:'tg',lv:{},done:{},wk:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem('tt')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('tt',JSON.stringify(S))}catch(e){}};
+const D=()=>L[S.lang],U=i=>D().u[i];
+let li=0,ls=0,text='',ci=0,err=0,t0=null,tm=null,test=false,drill=false,dw=[],keys={},fing={},spans=[];
+
+function applyLang(){
+  document.documentElement.lang=S.lang;
+  document.querySelectorAll('[data-u]').forEach(e=>e.textContent=U(e.dataset.u));
+  $('#tag').textContent=D().tag;
+  $('#langs').innerHTML='';
+  for(const k in L){const b=document.createElement('button');b.className='pill'+(k===S.lang?' on':'');b.textContent=L[k].n;b.onclick=()=>{S.lang=k;save();li=S.lv[k]||0;ls=0;test=drill=false;applyLang();buildKb();renderLv();loadLesson();if(S.lv[k]==null)$('#intro').classList.add('on')};$('#langs').appendChild(b)}
+}
+function hand(s){
+  const fg=(c,x,y,w,h)=>`<g class="fg" data-c="${s+c}" style="--f:${FCOL[s+c]}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${w/2}" fill="url(#sk${s})"/><rect class="hl" x="${x}" y="${y}" width="${w}" height="${h}" rx="${w/2}"/><rect x="${x+w*.18}" y="${y+4}" width="${w*.64}" height="${w*.7}" rx="${w*.3}" fill="#fbe9dd" opacity=".85"/><path d="M${x+3} ${y+h*.5}q${w/2-3} 5 ${w-6} 0M${x+3} ${y+h*.75}q${w/2-3} 5 ${w-6} 0" stroke="#8a4d2c" stroke-opacity=".25" fill="none"/></g>`;
+  let o=`<svg viewBox="-10 0 220 230" aria-hidden="true"><defs><linearGradient id="sk${s}" x1="0" x2="1"><stop offset="0" stop-color="#f7d6bd"/><stop offset=".55" stop-color="#e8b08c"/><stop offset="1" stop-color="#c98b67"/></linearGradient></defs><g${s==='R'?' transform="translate(200,0) scale(-1,1)"':''}><rect x="14" y="120" width="150" height="100" rx="44" fill="url(#sk${s})"/>`;
+  [['P',28,92,24],['R',66,52,27],['M',104,36,28],['I',142,58,27]].forEach(([c,cx,y,w])=>o+=fg(c,cx-w/2,y,w,160-y));
+  return o+`<g transform="rotate(38 165 200)">${fg('T',150,120,30,84)}</g></g></svg>`}
+function buildKb(){
+  const kb=$('#kb');kb.innerHTML='';keys={};fing={};
+  D().rows.forEach((r,ri)=>{
+    const row=document.createElement('div');row.className='row';row.style.paddingLeft=ri*14+'px';
+    [...r].forEach((ch,i)=>{const f=FING[i]||'RP',k=document.createElement('div');k.className='k';k.style.setProperty('--f',FCOL[f]);k.textContent=ch;k.innerHTML+='<i></i>';k.dataset.f=f;keys[ch]=k;row.appendChild(k)});
+    kb.appendChild(row)});
+  const sr=document.createElement('div');sr.className='row';const sp=document.createElement('div');sp.className='k sp';sp.style.setProperty('--f',FCOL.LT);sp.dataset.f='LT';keys[' ']=sp;sr.appendChild(sp);kb.appendChild(sr);
+  $('#hands').innerHTML=hand('L')+hand('R');fing={};document.querySelectorAll('.fg').forEach(g=>fing[g.dataset.c]=g);
+}
+function renderLv(){
+  const box=$('#lvs');box.innerHTML='';
+  D().lv.forEach((v,i)=>{const b=document.createElement('button');b.className='pill'+(i===li?' on':'');b.innerHTML=(i+1)+'. '+v.t+(S.lv[S.lang]===i?'<span class="star">★</span>':'');b.onclick=()=>{test=drill=false;li=i;ls=0;renderLv();loadLesson()};box.appendChild(b)});
+  const g=$('#les');g.innerHTML='';
+  D().lv[li].l.forEach((_,j)=>{const b=document.createElement('button');const d=S.done[S.lang+li+j];b.className='pill'+(j===ls&&!test?' on':'');b.textContent=(j+1)+(d?' ✓':'');b.onclick=()=>{test=drill=false;ls=j;renderLv();loadLesson()};g.appendChild(b)});
+}
+function loadLesson(){
+  clearInterval(tm);t0=null;ci=0;err=0;
+  let raw=test?D().test:D().lv[li].l[ls];
+  if(drill)raw=gen(dw,dw.concat([...D().rows[2]].filter(isL).slice(0,6)),42);else if(raw&&raw.n)raw=gen(raw.n,raw.p,46);
+  const [tx,sb]=raw.split('|');
+  text=tx;$('#sub').textContent=sb||'';
+  $('#txt').innerHTML='';spans=[...text].map(ch=>{const s=document.createElement('span');s.textContent=ch;$('#txt').appendChild(s);return s});
+  $('#wpm').textContent='0';$('#acc').textContent='100%';$('#erc').textContent='0';$('#tim').textContent='00:00';$('#bar').style.width='0';
+  $('#hint').innerHTML='';const ht=document.createElement('span');ht.textContent=U(6)+' · '+D().lay;$('#hint').appendChild(ht);
+  const nl=drill?dw:(D().lv[li].l[ls]||{}).n;
+  if(nl&&!test){const w=document.createElement('div');w.style.cssText='margin-top:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap';w.append(U(drill?13:15)+': ');nl.forEach(c=>{const b=document.createElement('b');b.textContent=c;b.style.cssText='padding:4px 10px;border-radius:8px;font:700 16px JetBrains Mono;color:#111;background:'+(FCOL[(keys[c]||{dataset:{}}).dataset.f]||'#fff');w.appendChild(b)});$('#hint').appendChild(w)}
+  mark();wkUpdate();
+}
+function mark(){
+  Object.values(keys).forEach(k=>k.classList.remove('t'));Object.values(fing).forEach(f=>f.classList.remove('on'));
+  spans.forEach((s,i)=>{if(i===ci)s.className='a'});
+  const ch=text[ci];if(ch==null)return;
+  const k=keys[ch.toLowerCase()];if(k){k.classList.add('t');const f=fing[k.dataset.f];if(f)f.classList.add('on')}
+}
+function stats(){
+  if(!t0)return;const m=(Date.now()-t0)/6e4;
+  $('#wpm').textContent=Math.round(ci/5/Math.max(m,1/600));
+  $('#acc').textContent=Math.round(ci/Math.max(ci+err,1)*100)+'%';
+}
+function track(c,ok){c=c.toLowerCase();if(!isL(c))return;const w=(S.wk[S.lang]??={});(w[c]??=[0,0])[ok?0:1]++}
+function weak(){const w=S.wk[S.lang]||{},r=x=>x[1]/(x[0]+x[1]);return Object.entries(w).filter(([c,x])=>x[1]>=2&&r(x)>.12).sort((a,b)=>r(b[1])-r(a[1])).slice(0,5).map(x=>x[0])}
+function wkUpdate(){const w=weak(),b=$('#wk');b.hidden=!w.length;b.textContent='🎯 '+U(13)+': '+w.join(' ')}
+function startDrill(){const w=weak();if(!w.length)return;drill=true;test=false;dw=w;renderLv();loadLesson()}
+$('#wk').onclick=startDrill;
+addEventListener('keydown',e=>{
+  if(document.querySelector('.ov.on')||e.ctrlKey||e.altKey||e.metaKey)return;
+  if(e.key===' ')e.preventDefault();
+  const pk=keys[e.key.toLowerCase()];if(pk){pk.classList.add('down');setTimeout(()=>pk.classList.remove('down'),110)}
+  if(e.key.length!==1)return;
+  if(!t0){t0=Date.now();tm=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1e3);$('#tim').textContent=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');stats()},500)}
+  track(text[ci],e.key===text[ci]);
+  if(e.key===text[ci]){spans[ci].className='c';ci++;$('#bar').style.width=ci/text.length*100+'%';if(ci>=text.length){stats();return finish()}}
+  else{err++;spans[ci].className='e';$('#erc').textContent=err}
+  stats();mark();
+});
+let nx='next';
+function finish(){
+  clearInterval(tm);
+  const m=(Date.now()-t0)/6e4,wpm=Math.round(text.length/5/m),acc=Math.round(text.length/(text.length+err)*100);
+  $('#rw').textContent=wpm;$('#ra').textContent=acc+'%';$('#re').textContent=err;$('#rt').textContent=$('#tim').textContent;
+  const n=D().lv.length;let msg='';nx='next';
+  if(test){
+    const sc=wpm*acc/100;let idx=sc<7?0:sc<15?1:sc<25?2:sc<35?3:4;idx=Math.min(idx,n-1);if(acc<80)idx=Math.max(0,idx-1);
+    S.lv[S.lang]=idx;msg=U(12).replace('{n}',D().lv[idx].t);nx='lvl'+idx;
+  }else if(drill){
+    if(acc>=92){dw.forEach(c=>{const r=(S.wk[S.lang]||{})[c];if(r)r[1]>>=1});msg=U(17)}else{nx='drill';msg=U(14)}
+  }else{
+    if(acc>=85)S.done[S.lang+li+ls]=1;
+    if(acc<92&&weak().length){nx='drill';msg=U(14)}
+  }
+  save();const w=weak();
+  $('#rweak').textContent=w.length?U(13)+': '+w.join('  '):'';
+  $('#rmsg').textContent=msg;$('#rNext').textContent=nx==='drill'?U(16):U(5);
+  $('#res').classList.add('on');
+}
+$('#rRetry').onclick=()=>{$('#res').classList.remove('on');loadLesson()};
+$('#rNext').onclick=()=>{
+  $('#res').classList.remove('on');
+  if(nx==='drill'&&weak().length){drill=true;test=false;dw=weak()}
+  else{
+    const stay=drill&&!S.done[S.lang+li+ls];drill=false;
+    if(nx.startsWith('lvl')){test=false;li=+nx.slice(3);ls=0}
+    else if(stay){}
+    else if(ls<D().lv[li].l.length-1)ls++;
+    else if(li<D().lv.length-1){li++;ls=0}
+  }
+  renderLv();loadLesson();
+};
+$('#goTest').onclick=()=>{$('#intro').classList.remove('on');test=true;drill=false;renderLv();loadLesson()};
+$('#goBeg').onclick=()=>{$('#intro').classList.remove('on');S.lv[S.lang]=0;save();li=0;ls=0;renderLv();loadLesson()};
+// 3D tilt of the keyboard stage
+const st=$('#stage'),kb=$('#kb');
+st.addEventListener('mousemove',e=>{const r=st.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;kb.style.transform=`rotateX(${22-y*10}deg) rotateY(${x*16}deg)`});
+st.addEventListener('mouseleave',()=>kb.style.transform='');
+// Init
+li=S.lv[S.lang]||0;applyLang();buildKb();renderLv();loadLesson();
+if(S.lv[S.lang]==null)$('#intro').classList.add('on');
+</script>
+</body>
+</html>
